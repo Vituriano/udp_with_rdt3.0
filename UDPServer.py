@@ -43,7 +43,7 @@ def check_checksum_calculator(data, checksum):
  
     ReceiverSum = bin(int(c1, 2)+int(c2, 2)+int(checksum, 2) +
                       int(c3, 2)+int(c4, 2)+int(checksum, 2))[2:]
- 
+
     if(len(ReceiverSum) > 16):
         x = len(ReceiverSum)-16
         ReceiverSum = bin(int(ReceiverSum[0:x], 2)+int(ReceiverSum[x:], 2))[2:]
@@ -83,7 +83,7 @@ while offset < len(content):
         packet = (str(seq) + segment).encode()
         data_length = len(packet)
         checksum = checksum_calculator(packet)
-        udp_header = struct.pack('!IIII', source_port, destination_port, data_length, int(checksum, 2))
+        udp_header = struct.pack('!IIIII', source_port, destination_port, data_length, int(checksum, 2), seq)
 
         packet_with_header = udp_header + packet
 
@@ -95,11 +95,9 @@ while offset < len(content):
         except socket.timeout:
             print("Timeout")
         else:
-            full_segment = struct.unpack("!II", message)
-            checksum = full_segment[0]
-            ack_seq = full_segment[1]
-            if chr(ack_seq) == str(seq):
-            #if check_checksum_calculator(str(ack_seq).encode(), checksum) and chr(ack_seq) == str(seq):
+            checksum = message[:16]
+            ack_seq = message[19]
+            if checksum_calculator(message[16:]) == checksum.decode() and chr(ack_seq) == str(seq):
                 ack_received = True
 
     seq = 1 - seq

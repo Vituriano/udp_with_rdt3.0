@@ -45,6 +45,8 @@ def check_checksum_calculator(data, checksum):
     if(len(ReceiverSum) > 16):
         x = len(ReceiverSum)-16
         ReceiverSum = bin(int(ReceiverSum[0:x], 2)+int(ReceiverSum[x:], 2))[2:]
+    if(len(ReceiverSum) < 16):
+        ReceiverSum = '0'*(16-len(ReceiverSum))+ReceiverSum
  
     return int(ReceiverSum, 2) == 0
 
@@ -63,26 +65,25 @@ expecting_seq = 0
 while True:
     full_packet, sender_address = recv_sock.recvfrom(1024)
 
-    udp_header = full_packet[:16]
-    data = full_packet[16:]
-    udp_header = struct.unpack("!IIII", udp_header)
+    udp_header = full_packet[:20]
+    data = full_packet[20:]
+    udp_header = struct.unpack("!IIIII", udp_header)
     correct_checksum = udp_header[3]
 
-    print(data)
-    seq = int(data.decode()[0])
+    seq = udp_header[4]
     content = data[1:]
 
     is_data_corrupted = check_checksum_calculator(data, correct_checksum)
 
     if not is_data_corrupted:
-        checksum = checksum_calculator(str(seq).encode())
-        header = struct.pack("!II", int(checksum, 2), seq)
-        send_socket.sendto(header, receiver_addr)
+        value = "ACK" + str(seq)
+        checksum = checksum_calculator(value.encode())
+        send_socket.sendto((checksum + value).encode(), receiver_addr)
         if str(seq) == str(expecting_seq):
             print(content.decode())
             expecting_seq = 1 - expecting_seq
     else:
         negative_seq = 1 - expecting_seq
-        checksum = checksum_calculator(str(negative_seq).encode())
+        checksum = checksum_calculator(negative_seq)
         header = struct.pack("!II", int(checksum, 2), negative_seq)
         send_socket.sendto(header, receiver_addr)
