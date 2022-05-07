@@ -60,3 +60,8 @@ menu = [
     "price": 44.5
   }
 ]
+
+def find_item(id: int) -> dict:
+  for item in menu:
+    if item['id'] == id:
+      return item
