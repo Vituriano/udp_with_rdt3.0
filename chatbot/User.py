@@ -13,12 +13,21 @@ class User:
     if order:
       self.orders.append(order)
 
-  def print_orders(self) -> None:
+  def get_orders(self) -> int:
+    total = 0
+
     print(f"| {self.name} |\n")
 
     for order in self.orders:
+      total += order['price']
+
       print(f"{order['name']} -> {order['price']}")
       print("--------------------------------------------------")
+
+    print(f"\nTotal: R$ {format(total, '.2f')}")
+    print("--------------------------------------------------\n")
+
+    return total
 
 if __name__ == "__main__":
   user = User(0, "Teste", "128.65.27.104:5000")
@@ -28,4 +37,4 @@ if __name__ == "__main__":
   user.add_order(11)
   user.add_order(1)
   user.add_order(3)
-  user.print_orders()
+  user.get_orders()
