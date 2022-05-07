@@ -40,4 +40,4 @@ class Table:
 
       if item:
         user.add_order(order_id)
-        table_total += item['price']
+        self.table_total += item['price']
