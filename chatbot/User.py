@@ -1,10 +1,11 @@
 from utils.menu import find_item
 
 class User:
-  def __init__(self, id: int, name: str, socket: str) -> None:
+  def __init__(self, id: int, name: str, socket: str, table_id: int) -> None:
       self.id = id
       self.name = name
       self.socket = socket
+      self.table_id = table_id
       self.orders = []
 
   def add_order(self, order_id: int) -> None:
@@ -30,7 +31,7 @@ class User:
     return total
 
 if __name__ == "__main__":
-  user = User(0, "Teste", "128.65.27.104:5000")
+  user = User(0, "Teste", "128.65.27.104:5000", 5)
 
   user.add_order(1)
   user.add_order(2)
