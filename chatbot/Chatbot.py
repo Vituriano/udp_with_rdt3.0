@@ -4,7 +4,8 @@
 # realizar pedido OK
 # conta do usuário OK
 # conta da mesa OK
-# chamar o gerente
+# pagar
+# levantar da mesa OK
 
 from User import User
 from utils.menu import menu
@@ -24,10 +25,10 @@ class Waiter:
 
     print("\n")
 
-  def add_user_to_list_of_clients(self, user: User):
+  def add_user_to_list_of_clients(self, user: User) -> None:
     self.list_of_clients.append(user)
 
-  def show_table_orders(self, user_id: int):
+  def show_table_orders(self, user_id: int) -> None:
     table_total = 0
 
     user = self.__find_user(user_id)
@@ -41,14 +42,19 @@ class Waiter:
     print(f"\nTotal da mesa: R$ {format(table_total, '.2f')}")
     print("--------------------------------------------------\n\n")
 
-  def show_individual_orders(self, user_id: int):
+  def show_individual_orders(self, user_id: int) -> None:
     user = self.__find_user(user_id)
     user.get_orders()
 
-  def __find_user(self, user_id: int):
+  def __find_user(self, user_id: int) -> User:
     for user in self.list_of_clients:
       if user.id == user_id:
         return user
+
+  def remove_user_from_list(self, user_id: int) -> None:
+    updated_list_of_clients = [user for user in self.list_of_clients if not (user.id == user_id)]
+
+    self.list_of_clients = updated_list_of_clients
 
 
 if __name__ == "__main__":
@@ -84,3 +90,8 @@ if __name__ == "__main__":
   waiter.show_table_orders(user.id)
   waiter.show_table_orders(user3.id)
   waiter.show_individual_orders(user.id)
+
+  waiter.remove_user_from_list(0)
+  waiter.remove_user_from_list(1)
+  waiter.remove_user_from_list(2)
+  waiter.remove_user_from_list(0)
