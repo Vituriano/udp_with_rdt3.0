@@ -51,10 +51,12 @@ class Waiter:
       if user.id == user_id:
         return user
 
-  def remove_user_from_list(self, user_id: int) -> None:
+  def remove_user_from_list(self, user_id: int) -> bool:
     updated_list_of_clients = [user for user in self.list_of_clients if not (user.id == user_id)]
 
     self.list_of_clients = updated_list_of_clients
+
+    return True
 
 
 if __name__ == "__main__":
