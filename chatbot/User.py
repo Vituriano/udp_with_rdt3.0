@@ -1,11 +1,11 @@
 from utils.menu import find_item
 
 class User:
-  def __init__(self, id: int, name: str, socket: str, orders: list[dict] = []) -> None:
+  def __init__(self, id: int, name: str, socket: str) -> None:
       self.id = id
       self.name = name
       self.socket = socket
-      self.orders = orders
+      self.orders = []
 
   def add_order(self, order_id: int) -> None:
     order = find_item(order_id)
