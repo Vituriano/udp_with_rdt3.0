@@ -4,7 +4,7 @@
 # realizar pedido OK
 # conta do usuário OK
 # conta da mesa OK
-# pagar
+# pagar OK
 # levantar da mesa OK
 
 from User import User
