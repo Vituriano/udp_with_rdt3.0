@@ -19,18 +19,24 @@ class Table:
     return True
 
   def get_table_total(self) -> None:
-    total = 0
-
     for user in self.clients:
-      total += user.get_orders()
+      user.get_orders()
 
-    print(f"\nTotal da mesa: R$ {format(total, '.2f')}")
+    print(f"\nTotal da mesa: R$ {format(self.table_total, '.2f')}")
     print("--------------------------------------------------\n\n")
 
   def __find_user(self, user_id: int) -> User:
     for user in self.clients:
       if user.id == user_id:
         return user
+
+  def compute_user_surplus(self, amount: float, user_id: int) -> None:
+    equally_divided_amount = amount / (len(self.clients) - 1)
+
+    for user in self.clients:
+      if user.id != user_id:
+        user.bill -= equally_divided_amount
+
 
   def compute_user_order(self, user_id: int, order_id: int) -> None:
     user = self.__find_user(user_id)

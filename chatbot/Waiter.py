@@ -4,7 +4,7 @@
 # realizar pedido OK
 # conta do usuário OK
 # conta da mesa OK
-# pagar
+# pagar OK
 # levantar da mesa OK
 
 from User import User
@@ -74,6 +74,10 @@ class Waiter:
     user = self.__find_user(user_id)
 
     if user:
+      if user.bill > 0:
+        print("Você precisa pagar sua conta para que possa sair do restaurante!")
+        return
+
       table = self.__find_table(user)
 
       if table:
@@ -87,12 +91,34 @@ class Waiter:
 
     return False
 
+  def pay_bill(self, user_id: int, amount: float) -> None:
+    user = self.__find_user(user_id)
+
+    if user:
+        if amount < user.bill:
+          print(f"Você deve pagar, pelo menos R$ {format(user.bill, '.2f')}")
+          return
+
+        table = self.__find_table(user)
+
+        if table:
+          if amount > table.table_total:
+            print(f"Você não pode pagar mais do que R$ {format(table.table_total, '.2f')}")
+            return
+
+          surplus = amount - user.bill
+          table.table_total -= amount
+          user.bill = 0
+
+          if surplus > 0:
+            table.compute_user_surplus(surplus, user_id)
+
 
 if __name__ == "__main__":
   waiter = Waiter()
   user = User(0, "Teste", "128.65.27.104:5000", 5)
   user2 = User(1, "Outro Teste", "128.65.27.104:5500", 5)
-  user3 = User(2, "Mais um Teste", "128.65.27.104:5550", 4)
+  user3 = User(2, "Mais um Teste", "128.65.27.104:5550", 5)
 
   waiter.add_user_to_list_of_clients(user)
   waiter.add_user_to_list_of_clients(user2)
@@ -120,9 +146,11 @@ if __name__ == "__main__":
 
   waiter.show_table_orders(user.id)
   waiter.show_table_orders(user3.id)
+  waiter.pay_bill(user.id, 200)
   waiter.show_individual_orders(user.id)
 
-  waiter.remove_user_from_list(0)
-  waiter.remove_user_from_list(1)
-  waiter.remove_user_from_list(2)
-  waiter.remove_user_from_list(0)
+  waiter.remove_user_from_list(user.id)
+  waiter.show_table_orders(user2.id)
+  waiter.remove_user_from_list(user2.id)
+  waiter.remove_user_from_list(user3.id)
+  waiter.remove_user_from_list(user.id)
