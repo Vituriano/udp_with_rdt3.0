@@ -116,7 +116,8 @@ class Waiter:
 
 if __name__ == "__main__":
   waiter = Waiter()
-  user = User(0, "Teste", "128.65.27.104:5000", 5)
+  # são da mesa 5
+  user = User(0, "Teste", "128.65.27.104:5000", 5) 
   user2 = User(1, "Outro Teste", "128.65.27.104:5500", 5)
   user3 = User(2, "Mais um Teste", "128.65.27.104:5550", 5)
 
