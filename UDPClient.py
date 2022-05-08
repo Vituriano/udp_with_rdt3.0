@@ -27,7 +27,7 @@ while True:
     seq = udp_header[4]
     content = data[1:]
 
-    if checksum_calculator(data) != correct_checksum:
+    if int(checksum_calculator(data), 2) == correct_checksum:
         value = "ACK" + str(seq)
         checksum = checksum_calculator(value.encode())
         send_socket.sendto((checksum + value).encode(), receiver_addr)
