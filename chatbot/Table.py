@@ -1,5 +1,5 @@
-from User import User
-from utils.menu import find_item
+from chatbot.User import User
+from chatbot.utils.menu import find_item
 
 class Table:
   clients: list[User] = []
@@ -18,12 +18,14 @@ class Table:
 
     return True
 
-  def get_table_total(self) -> None:
+  def get_table_total(self) -> str:
+    output = ""
     for user in self.clients:
-      user.get_orders()
+      output += user.get_orders()
 
-    print(f"\nTotal da mesa: R$ {format(self.table_total, '.2f')}")
-    print("--------------------------------------------------\n\n")
+    output += f"\nTotal da mesa: R$ {format(self.table_total, '.2f')}\n"
+    output += "--------------------------------------------------\n\n"
+    return output
 
   def __find_user(self, user_id: int) -> User:
     for user in self.clients:
@@ -43,7 +45,6 @@ class Table:
 
     if user:
       item = find_item(order_id)
-
       if item:
         user.add_order(order_id)
         self.table_total += item['price']

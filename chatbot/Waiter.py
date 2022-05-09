@@ -7,9 +7,9 @@
 # pagar OK
 # levantar da mesa OK
 
-from User import User
-from Table import Table
-from utils.menu import menu
+from chatbot.User import User
+from chatbot.Table import Table
+from chatbot.utils.menu import menu
 
 
 class Waiter:
@@ -41,18 +41,18 @@ class Waiter:
 
     self.list_of_clients.append(user)
 
-  def show_table_orders(self, user_id: int) -> None:
+  def show_table_orders(self, user_id: int) -> str:
     user = self.__find_user(user_id)
 
     table_id = user.table_id
 
     for table in self.list_of_tables:
       if table.id == table_id:
-        table.get_table_total()
+        return table.get_table_total()
 
-  def show_individual_orders(self, user_id: int) -> None:
+  def show_individual_orders(self, user_id: int) -> str:
     user = self.__find_user(user_id)
-    user.get_orders()
+    return user.get_orders()
 
   def user_order(self, user_id: int, order_id: int) -> None:
     user = self.__find_user(user_id)

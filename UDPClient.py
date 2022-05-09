@@ -21,15 +21,16 @@ recv_sock.settimeout(1)
 
 content = ''
 
-while content != "exit":
+while content != "sair":
     
     expecting_seq = 0
     content = input("cliente: ")
+    
     print ("\033[A                             \033[A")
     print(now + " cliente: " + content)
     sender(content, send_socket, recv_sock, source_port, destination_port, recv_addr)
 
-    while True:
+    while content != "sair":
         try:
             message, address = recv_sock.recvfrom(1024)
         except socket.timeout:
@@ -49,12 +50,14 @@ while content != "exit":
                     checksum = checksum_calculator(value.encode())
                     send_socket.sendto((checksum + value).encode(), recv_addr)
                     if str(seq) == str(expecting_seq):
-                        print("CinToFome: " + content.decode())
-                        break
+                        print(now + " CinToFome: " + content.decode())
                         expecting_seq = 1 - expecting_seq
+                        break
                 else:
                     negative_seq = 1 - expecting_seq
                     checksum = checksum_calculator(negative_seq)
                     header = struct.pack("!II", int(checksum, 2), negative_seq)
                     send_socket.sendto(header, recv_addr)
                     break
+
+send_socket.close()

@@ -1,4 +1,4 @@
-from utils.menu import find_item
+from chatbot.utils.menu import find_item
 
 class User:
   bill = 0
@@ -12,21 +12,21 @@ class User:
 
   def add_order(self, order_id: int) -> None:
     order = find_item(order_id)
-
     self.bill += order["price"]
 
     if order:
       self.orders.append(order)
 
-  def get_orders(self) -> None:
-    print(f"| {self.name} |\n")
+  def get_orders(self) -> str:
+    output = f"| {self.name.decode()} |\n"
 
     for order in self.orders:
-      print(f"{order['name']} -> {order['price']}")
-      print("--------------------------------------------------")
+      output += f"{order['name']} -> {order['price']}\n"
+      output += "--------------------------------------------------\n"
 
-    print(f"\nTotal: R$ {format(self.bill, '.2f')}")
-    print("--------------------------------------------------\n")
+    output += f"\nTotal: R$ {format(self.bill, '.2f')}\n"
+    output += "--------------------------------------------------\n"
+    return output
 
 if __name__ == "__main__":
   user = User(0, "Teste", "128.65.27.104:5000", 5)

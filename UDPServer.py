@@ -6,6 +6,7 @@ from sender import sender
 from datetime import datetime
 from chatbot.main import option
 
+
 now = datetime.now().strftime("%H:%M")
 
 source_port = 1112
@@ -21,9 +22,9 @@ recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock.bind(this_addr)
 recv_sock.settimeout(1)
 
-content = ''
+answer = ''
 
-while content != "exit":
+while answer != "Digite sair para sair":
     expecting_seq = 0
 
     while True:
@@ -58,3 +59,4 @@ while content != "exit":
                     break
 
     sender(answer, send_socket, recv_sock, source_port, destination_port, recv_addr)
+send_socket.close()
