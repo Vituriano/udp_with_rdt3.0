@@ -4,6 +4,7 @@ import struct
 from receiver import receiver
 from sender import sender
 from datetime import datetime
+from chatbot.main import option
 
 now = datetime.now().strftime("%H:%M")
 
@@ -46,7 +47,7 @@ while content != "exit":
                     checksum = checksum_calculator(value.encode())
                     send_socket.sendto((checksum + value).encode(), recv_addr)
                     if str(seq) == str(expecting_seq):
-                        print("Cliente:  " + content.decode())
+                        answer = option(content, address)
                         expecting_seq = 1 - expecting_seq
                         break
                 else:
@@ -56,7 +57,4 @@ while content != "exit":
                     send_socket.sendto(header, recv_addr)
                     break
 
-    content = input("CINToFome: ")
-    print ("\033[A                             \033[A")
-    print(now + " CINToFome: " + content)
-    sender(content, send_socket, recv_sock, source_port, destination_port, recv_addr)
+    sender(answer, send_socket, recv_sock, source_port, destination_port, recv_addr)
