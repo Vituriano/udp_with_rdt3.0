@@ -28,6 +28,6 @@ def sender(content:str, send_socket:socket, recv_sock:socket, source_port:int, d
 
             send_socket.sendto(packet_with_header, receiver_addr)
 
-            ack_received = receiver(seq, recv_sock) or False
+            ack_received = True if receiver(seq, recv_sock) else False
 
         seq = 1 - seq
