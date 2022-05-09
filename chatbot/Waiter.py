@@ -18,14 +18,15 @@ class Waiter:
   list_of_clients = []
   list_of_tables: list[Table] = []
 
-  def show_menu(self) -> None:
-    print("Menu:\n")
+  def show_menu(self) -> str:
+    output = "Menu:\n"
 
     for item in menu:
-      print(f"{item['id']} | {item['name']} - {item['price']}")
-      print("--------------------------------------------------")
+      output += f"{item['id']} | {item['name']} - {item['price']}\n"
+      output += "--------------------------------------------------\n"
 
-    print("\n")
+    output += "\n"
+    return output
 
   def add_user_to_list_of_clients(self, user: User) -> None:
     table = self.__find_table(user)
